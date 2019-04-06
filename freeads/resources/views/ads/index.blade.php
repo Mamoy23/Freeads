@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header text-center">All the ads</div>
 
@@ -15,9 +15,27 @@
                         </div>
                     @endif
 
-                    <div class="container">  
-                    <a href="ad/create" class="btn btn-success m-1">Add an ad</a>
-                    <a href="ad/list" class="btn btn-info m-1">My ads</a>
+                    <div class="container"> 
+                    <form method="get" action="{{ action('AdController@search') }}" class="form-inline m-4">
+                            {{csrf_field()}}
+                            <input type="search" name="search" class="form-control m-1" placeholder="Enter a title or detail" />
+                            <input type="number" name="minprice" class="form-control m-1" placeholder="Min price" style="width: 100px;" min=0>
+                            <input type="number" name="maxprice" class="form-control m-1" placeholder="Max price" style="width: 105px;" min=0>
+                            <select name="category" id="category" class="custom-select">
+                                <option value="">Category</option>
+                                <option value="vehicle">Vehicle</option>
+                                <option value="home">Home</option>
+                                <option value="toy">Toy</option>
+                                <option value="clothing">Clothing</option>
+                            </select>
+                            <input type="submit" class="btn btn-outline-success m-1" value="Search" />
+                    </form>
+
+                    <a href="{{ action('AdController@searchRecent')}}" class="btn btn-success m-1">Show most recents ads</a>
+
+                    @if (count($ads) === 0)
+                    <p class="text-center">No ads found</p>
+                    @else
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -40,6 +58,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @endif
                     </div>
                 </div>
             </div>

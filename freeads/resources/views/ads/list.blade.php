@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header text-center">My ads</div>
 
@@ -16,7 +16,6 @@
                     @endif
 
                     <div class="container">  
-                    <a href="create" class="btn btn-success m-1">Add an ad</a>
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -35,7 +34,7 @@
                                         <td>{{ substr($ad->details, 0, 50) }}...</td>
                                         <td>{{ $ad->price }}€</td>
                                         <td><img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 100px; height: auto;"/></td>
-                                        <td><a href="{{ action('AdController@edit', $ad->id) }}" class="btn btn-info">Edit</a></td>
+                                        <td><a href="{{ action('AdController@edit', $ad->id) }}" class="btn btn-primary">Edit</a></td>
                                         <td>
                                             <form action="{{ action('AdController@destroy', $ad->id) }}" class="deleteform" method="POST">
                                                 {{csrf_field()}}
@@ -47,6 +46,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                    <a href="create" class="btn btn-success m-1">Add an ad</a>
                     </div>
                 </div>
             </div>

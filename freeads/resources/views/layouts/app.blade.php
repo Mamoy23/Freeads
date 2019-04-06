@@ -50,11 +50,6 @@
                                 </li>
                             @endif
                         @else
-                            <form class="form-inline my-2 my-lg-0" action="{{ route('ad.search') }}" method="POST">
-                            @csrf
-                                <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -74,6 +69,9 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ route('ad.list') }}">
                                         {{ __('My ads') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('chat.index') }}">
+                                        {{ __('Chat') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

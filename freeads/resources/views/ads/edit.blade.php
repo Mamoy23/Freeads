@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Edit my ad " {{ $ad->title }} "</div>
 
@@ -15,14 +15,14 @@
                         </div>
                     @endif
                     @if(count($errors) > 0)
-
-<div class="alert alert-danger">
-       <ul>
-       @foreach($errors->all() as $error)
-        <li>{{$error}}</li>
-       @endforeach
-       </ul>
-@endif
+                    <div class="alert alert-danger">
+                    <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                    </ul>
+                    </div>
+                    @endif
 
                     <div class="container">  
                         <form method="post" action="{{ action('AdController@update', $ad->id) }}" class="form-group" enctype="multipart/form-data">

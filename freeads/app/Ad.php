@@ -10,7 +10,10 @@ class Ad extends Model
         'title',
         'details',
         'photo',
+        'photo2',
+        'photo3',
         'price',
-        'id_user'      
+        'id_user',
+        'category'     
     ];
 }

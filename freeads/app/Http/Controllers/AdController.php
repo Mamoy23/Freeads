@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 use App\Ad;
 
 class AdController extends Controller
@@ -46,24 +47,34 @@ class AdController extends Controller
                 'title' => 'required|max:255',
                 'details' => 'required|max:255',
                 'price' => 'required',
-                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'photo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'photo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'category' => 'required'
             ]);
 
-            //$request->photo->store('public/images');
+            
             $file = $request->photo;
+            $file2 = $request->photo2;
+            $file3 = $request->photo3;
             $filename = $request->photo->getClientOriginalName();
-            //$extension = $request->photo->getClientOriginalExtension();
+            $filename2 = $request->photo2->getClientOriginalName();
+            $filename3 = $request->photo3->getClientOriginalName();
 
             Storage::disk('public')->put($filename, File::get($file));
+            Storage::disk('public')->put($filename2, File::get($file2));
+            Storage::disk('public')->put($filename3, File::get($file3));
 
             $ad = Ad::create([
                 'title' => $request->title,
                 'details' => $request->details,
                 'price' => $request->price,
                 'photo' => $filename,
-                'id_user' => $id_user
+                'photo2' => $filename2,
+                'photo3' => $filename3,
+                'id_user' => $id_user,
+                'category' => $request->category
             ]);
-            //dd($request->photo->getClientOriginalExtension());
             $ad->save();
 
             return redirect()->route('ad.index')->with('success', 'Your ad is online !');
@@ -148,18 +159,72 @@ class AdController extends Controller
 
         return redirect()->route('ad.list')->with('success', 'Ad deleted !');
     }
-        /**
-     * Remove the specified resource from storage.
+
+    /**
+     * Search ads
      *  @param  \Illuminate\Http\Request  $request
      * 
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
     {
-        dd('caca');
-        $ads = Ad::where('title', 'LIKE', '%'.$request->search.'%')->get();
+        $search = $request->search;
+        $maxprice = $request->maxprice;
+        $minprice = $request->minprice;
+        $category = $request->category;
 
-        //return view('ads.index', compact($ads));
-        return redirect()->route('ad.search');
+        $ads = Ad::where('title', 'like', '%'.$search.'%')
+                ->when($maxprice, function ($query, $maxprice) {
+                    return $query->where('price', '<=', $maxprice);
+                })
+                ->when($minprice, function ($query, $minprice) {
+                    return $query->where('price', '>=', $minprice);
+                })
+                ->when($category, function ($query, $category) {
+                    return $query->where('category', $category);
+                })
+                ->get();
+
+        // $ads = Ad::where('title', 'like', '%'.$search.'%')
+        // ->where(function ($query) use($request) {
+        //     if(!empty($request->maxprice)){
+        //         $query->where('price', '<', $request->maxprice);
+        //     }
+        //     else{
+        //         $query->where('title', 'like', '%'.$request->search.'%');
+        //     }
+        // })
+        // ->where(function ($query) use($request) {
+        //     if(!empty($request->minprice)){
+        //         $query->where('price', '>=', $request->minprice);
+        //     }
+        //     else{
+        //         $query->where('title', 'like', '%'.$request->search.'%');
+        //     }
+        // })
+        // ->where(function ($query) use($request) {
+        //     if(!empty($request->category)){
+        //         $query->where('category', $request->category);
+        //     }
+        //     else{
+        //         $query->where('title', 'like', '%'.$request->search.'%');
+        //     }
+        // })
+        // ->get();
+
+        return view('ads.index', compact('ads'));
+    }
+
+    /**
+     * Search recents ads.
+     * 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function searchRecent()
+    {
+        $ads = Ad::latest()->get();
+
+        return view('ads.index', compact('ads'));
     }
 }
