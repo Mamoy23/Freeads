@@ -11,25 +11,25 @@
                     <div class="d-flex flex-column align-items-center">          
                     @if (!empty($ad->photo2) && !empty($ad->photo3))
                     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width: 300px; height: 300px;">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                        <img class="d-block" src="{{ asset('storage/'.$ad->photo) }}" alt="First slide" style="width: 300px; height: 300px;">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                            <img class="d-block" src="{{ asset('storage/'.$ad->photo) }}" alt="First slide" style="width: 300px; height: 300px;">
+                            </div>
+                            <div class="carousel-item">
+                            <img class="d-block" src="{{ asset('storage/'.$ad->photo2) }}" alt="Second slide" style="width: 300px; height: 300px;">
+                            </div>
+                            <div class="carousel-item">
+                            <img class="d-block" src="{{ asset('storage/'.$ad->photo3) }}" alt="Third slide" style="width: 300px; height: 300px;">
+                            </div>
                         </div>
-                        <div class="carousel-item">
-                        <img class="d-block" src="{{ asset('storage/'.$ad->photo2) }}" alt="Second slide" style="width: 300px; height: 300px;">
-                        </div>
-                        <div class="carousel-item">
-                        <img class="d-block" src="{{ asset('storage/'.$ad->photo3) }}" alt="Third slide" style="width: 300px; height: 300px;">
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
                     @else
                         <img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 300px; height: auto;"/>

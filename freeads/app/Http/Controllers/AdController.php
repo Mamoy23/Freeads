@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
 use App\Ad;
 
 class AdController extends Controller
@@ -212,7 +211,6 @@ class AdController extends Controller
             $ads = Ad::when($match, function ($query, $match) {
                 return $query->where('category', $match);
             })
-            //$ads = Ad::all()->where('category', $match)
             ->when($maxprice, function ($query, $maxprice) {
                 return $query->where('price', '<=', $maxprice);
             })

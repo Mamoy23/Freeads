@@ -71,15 +71,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //$user_id = Auth::id();
         
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email'
             ]);
-            //dd($request->input('email'));
         $user = User::find($id);
-            //dd($user);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->save();
