@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header text-center">{{ $ad->title }}</div>
+                <div class="card-header text-center" style="font-size: 20px;">{{ $ad->title }}</div>
 
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-center">          
@@ -35,11 +35,10 @@
                         <img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 300px; height: auto;"/>
                     
                     @endif
-                        <p class="text-center m-2">{{ $ad->details }}</p>
+                        <p class="text-center m-2" style="font-size: 15px;">{{ $ad->details }}</p>
                         <p class="text-center font-weight-bold m-2">{{ $ad->price }}€</p>
                     </div>
                         <p>Posté le {{ $ad->created_at }}</p>
-                        <a href="/ad" class="btn btn-dark m-1">Back to list</a>
                 </div>
             </div>
         </div>

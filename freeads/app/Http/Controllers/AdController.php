@@ -41,43 +41,43 @@ class AdController extends Controller
      */
     public function store(Request $request)
     {
-            $id_user = Auth::id();
+        $id_user = Auth::id();
 
-            $this->validate($request, [
-                'title' => 'required|max:255',
-                'details' => 'required|max:255',
-                'price' => 'required',
-                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'photo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'photo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'category' => 'required'
-            ]);
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'details' => 'required|max:255',
+            'price' => 'required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo3' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category' => 'required'
+        ]);
 
-            
-            $file = $request->photo;
-            $file2 = $request->photo2;
-            $file3 = $request->photo3;
-            $filename = $request->photo->getClientOriginalName();
-            $filename2 = $request->photo2->getClientOriginalName();
-            $filename3 = $request->photo3->getClientOriginalName();
+        
+        $file = $request->photo;
+        $file2 = $request->photo2;
+        $file3 = $request->photo3;
+        $filename = $request->photo->getClientOriginalName();
+        $filename2 = $request->photo2->getClientOriginalName();
+        $filename3 = $request->photo3->getClientOriginalName();
 
-            Storage::disk('public')->put($filename, File::get($file));
-            Storage::disk('public')->put($filename2, File::get($file2));
-            Storage::disk('public')->put($filename3, File::get($file3));
+        Storage::disk('public')->put($filename, File::get($file));
+        Storage::disk('public')->put($filename2, File::get($file2));
+        Storage::disk('public')->put($filename3, File::get($file3));
 
-            $ad = Ad::create([
-                'title' => $request->title,
-                'details' => $request->details,
-                'price' => $request->price,
-                'photo' => $filename,
-                'photo2' => $filename2,
-                'photo3' => $filename3,
-                'id_user' => $id_user,
-                'category' => $request->category
-            ]);
-            $ad->save();
+        $ad = Ad::create([
+            'title' => $request->title,
+            'details' => $request->details,
+            'price' => $request->price,
+            'photo' => $filename,
+            'photo2' => $filename2,
+            'photo3' => $filename3,
+            'id_user' => $id_user,
+            'category' => $request->category
+        ]);
+        $ad->save();
 
-            return redirect()->route('ad.index')->with('success', 'Your ad is online !');
+        return redirect()->route('ad.index')->with('success', 'Your ad is online !');
         
     }
 
@@ -137,10 +137,6 @@ class AdController extends Controller
         $ad->title = $request->title;
         $ad->details = $request->details;
         $ad->price = $request->price;
-            // 'photo' => $filename,
-            // 'id_user' => $id_user
-       
-        //dd($request->photo->getClientOriginalExtension());
         $ad->save();
 
         return redirect()->route('ad.list')->with('success', 'Ad updated');
@@ -185,33 +181,6 @@ class AdController extends Controller
                 })
                 ->get();
 
-        // $ads = Ad::where('title', 'like', '%'.$search.'%')
-        // ->where(function ($query) use($request) {
-        //     if(!empty($request->maxprice)){
-        //         $query->where('price', '<', $request->maxprice);
-        //     }
-        //     else{
-        //         $query->where('title', 'like', '%'.$request->search.'%');
-        //     }
-        // })
-        // ->where(function ($query) use($request) {
-        //     if(!empty($request->minprice)){
-        //         $query->where('price', '>=', $request->minprice);
-        //     }
-        //     else{
-        //         $query->where('title', 'like', '%'.$request->search.'%');
-        //     }
-        // })
-        // ->where(function ($query) use($request) {
-        //     if(!empty($request->category)){
-        //         $query->where('category', $request->category);
-        //     }
-        //     else{
-        //         $query->where('title', 'like', '%'.$request->search.'%');
-        //     }
-        // })
-        // ->get();
-
         return view('ads.index', compact('ads'));
     }
 
@@ -226,5 +195,29 @@ class AdController extends Controller
         $ads = Ad::latest()->get();
 
         return view('ads.index', compact('ads'));
+    }
+    /**
+     * Matching
+     * @param  \Illuminate\Http\Request  $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function matching(Request $request)
+    {
+        $match = $request->look;
+        $maxprice = $request->maxprice;
+        $is_post = $request->method() == 'POST';
+
+        if($is_post){
+            $ads = Ad::when($match, function ($query, $match) {
+                return $query->where('category', $match);
+            })
+            //$ads = Ad::all()->where('category', $match)
+            ->when($maxprice, function ($query, $maxprice) {
+                return $query->where('price', '<=', $maxprice);
+            })
+            ->get();
+        }
+        return view('ads.match', compact('ads', 'is_post'));
     }
 }

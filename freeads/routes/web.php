@@ -15,22 +15,24 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'IndexController@showIndex');
-Route::get('/home', 'HomeController@index')->name('home');
-Route::post('user/{user}/edit', 'UserController@edit');
-Route::post('user/{user}', 'UserController@update');
-Route::resource('user', 'UserController');
+Route::get('/', 'IndexController@showIndex')->middleware('count');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('count');
+Route::post('user/{user}/edit', 'UserController@edit')->middleware('count');
+Route::post('user/{user}', 'UserController@update')->middleware('count');
+Route::resource('user', 'UserController')->middleware('count');
 Auth::routes(['verify' => true]);
 
 
-Route::post('ad/{ad}/edit', 'AdController@edit');
-Route::post('ad/{ad}', 'AdController@update');
-Route::post('ad/create', 'AdController@create');
-Route::get('ad/list', 'AdController@list')->name('ad.list');
-Route::get('ad/search', 'AdController@search')->name('ad.search');
-Route::get('ad/recent', 'AdController@searchRecent')->name('ad.recent');
-Route::resource('ad', 'AdController');
+Route::get('ad/match', 'AdController@matching')->name('ad.match')->middleware('count');
+Route::post('ad/match', 'AdController@matching')->middleware('count');
+Route::post('ad/{ad}/edit', 'AdController@edit')->middleware('count');
+Route::post('ad/{ad}', 'AdController@update')->middleware('count');
+Route::post('ad/create', 'AdController@create')->middleware('count');
+Route::get('ad/list', 'AdController@list')->name('ad.list')->middleware('count');
+Route::get('ad/search', 'AdController@search')->name('ad.search')->middleware('count');
+Route::get('ad/recent', 'AdController@searchRecent')->name('ad.recent')->middleware('count');
+Route::resource('ad', 'AdController')->middleware('count');
 
-Route::get('chat/{user}', 'ChatController@show')->name('chat.show');
-Route::post('chat/{user}', 'ChatController@store');
-Route::resource('chat', 'ChatController');
+Route::get('chat/{user}', 'ChatController@show')->name('chat.show')->middleware('count');
+Route::post('chat/{user}', 'ChatController@store')->middleware('count');
+Route::resource('chat', 'ChatController')->middleware('count');

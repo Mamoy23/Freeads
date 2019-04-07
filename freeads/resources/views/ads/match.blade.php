@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" style="font-size: 20px;">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header text-center font-weight-bold bg-dark text-white" style="font-size: 20px;">All the ads</div>
+                <div class="card-header text-center font-weight-bold bg-dark text-white">Matching</div>
 
                 <div class="card-body">
                     @if ($message = Session::get('success'))
@@ -25,26 +25,31 @@
                     @endif
 
                     <div class="container"> 
-                    <form method="get" action="{{ action('AdController@search') }}" class="form-inline m-4 d-flex justify-content-center">
-                            {{csrf_field()}}
-                            <input type="search" name="search" class="form-control m-1" placeholder="Enter a title or detail" />
-                            <input type="number" name="minprice" class="form-control m-1" placeholder="Min price" style="width: 100px;" min=0>
-                            <input type="number" name="maxprice" class="form-control m-1" placeholder="Max price" style="width: 105px;" min=0>
-                            <select name="category" id="category" class="custom-select">
-                                <option value="">Category</option>
-                                <option value="vehicle">Vehicle</option>
-                                <option value="home">Home</option>
-                                <option value="toy">Toy</option>
-                                <option value="clothing">Clothing</option>
-                            </select>
-                            <input type="submit" class="btn btn-outline-success m-1" value="Search" />
-                    </form>
+                        <p class="text-center font-italic">Let us know a little more about you, and find your perfect product !</p>
 
-                    <a href="{{ action('AdController@searchRecent')}}" class="btn btn-light m-1">Show most recents ads</a>
-
-                    @if (count($ads) === 0)
-                    <p class="text-center">No ads found</p>
-                    @else
+                        <form action="{{ action('AdController@matching') }}" method="post" class="d-flex flex-column justify-content-center">
+                            {{ csrf_field() }}
+                            <div class="p-2">
+                                <p>You're looking for something ...</p>
+                                <input type="radio" id="home" name="look" value="home">
+                                <label for="home">in your home</label>
+                                <input type="radio" id="vehicle" name="look" value="vehicle">
+                                <label for="vehicle">to move</label>
+                                <input type="radio" id="clothing" name="look" value="clothing">
+                                <label for="clothing">to wear</label>
+                                <input type="radio" id="toy" name="look" value="toy">
+                                <label for="toy">to play</label>
+                            </div>
+                            <div class="p-2">
+                                <p>What is your maximum budget ?</p>
+                                <input type="number" name="maxprice" class="form-control col-md-3" min=0>
+                            </div>
+                            <button type="submit" class="btn btn-outline-danger col-md-4 offset-md-4" style="font-size: 20px;">Go match <i class="fas fa-heartbeat"></i></button>
+                        </form>
+                        @if ($is_post)
+                        @if (count($ads) === 0)
+                            <p class="text-center">No match found, sorry <i class="fas fa-heart-broken"></i></p>
+                        @else
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -67,6 +72,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @endif
                             @endif
                     </div>
                 </div>
