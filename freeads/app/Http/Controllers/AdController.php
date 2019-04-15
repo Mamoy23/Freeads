@@ -18,8 +18,9 @@ class AdController extends Controller
     public function index()
     {
         $ads = Ad::all();
+        $search = [];
 
-        return view('ads.index', compact('ads'));
+        return view('ads.index', compact('ads', 'search'));
     }
 
     /**
@@ -180,7 +181,10 @@ class AdController extends Controller
                 })
                 ->get();
 
-        return view('ads.index', compact('ads'));
+        return view('ads.index', [
+            'ads' => $ads,
+            'search' => $request->all(),
+        ]);//compact('ads'));
     }
 
     /**

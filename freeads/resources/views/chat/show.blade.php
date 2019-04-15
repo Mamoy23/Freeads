@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header text-center">Chat</div>
+                <!-- <div class="card-header text-center">Chat</div> -->
 
                 <div class="card-body">
                     @if ($message = Session::get('success'))

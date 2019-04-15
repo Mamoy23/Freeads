@@ -27,15 +27,15 @@
                     <div class="container"> 
                     <form method="get" action="{{ action('AdController@search') }}" class="form-inline m-4 d-flex justify-content-center">
                             {{csrf_field()}}
-                            <input type="search" name="search" class="form-control m-1" placeholder="Enter a title or detail" />
+                            <input type="search" name="search" class="form-control m-1" value="{{ $search['search'] ?? '' }}" placeholder="Enter a title or detail" />
                             <input type="number" name="minprice" class="form-control m-1" placeholder="Min price" style="width: 100px;" min=0>
                             <input type="number" name="maxprice" class="form-control m-1" placeholder="Max price" style="width: 105px;" min=0>
                             <select name="category" id="category" class="custom-select">
                                 <option value="">Category</option>
-                                <option value="vehicle">Vehicle</option>
-                                <option value="home">Home</option>
-                                <option value="toy">Toy</option>
-                                <option value="clothing">Clothing</option>
+                                <option value="vehicle" {{ 'vehicle' == ($search['category'] ?? '') ? 'selected' : '' }}>Vehicle</option>
+                                <option value="home" {{ 'home' == ($search['category'] ?? '') ? 'selected' : '' }}>Home</option>
+                                <option value="toy" {{ 'toy' == ($search['category'] ?? '') ? 'selected' : '' }}>Toy</option>
+                                <option value="clothing" {{ 'clothing' == ($search['category'] ?? '') ? 'selected' : '' }}>Clothing</option>
                             </select>
                             <input type="submit" class="btn btn-outline-success m-1" value="Search" />
                     </form>
@@ -46,28 +46,39 @@
                     <p class="text-center">No ads found</p>
                     @else
                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <td>Title</td>
-                                        <td>Details</td>
-                                        <td>Price</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     @foreach($ads as $ad)
                                     <tr>
-                                        <td class="font-weight-bold">{{ $ad->title }}</td>
-                                        <td>{{ substr($ad->details, 0, 50) }}...</td>
-                                        <td>{{ $ad->price }}€</td>
-                                        <td><img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 100px; height: auto;"/></td>
-                                        <td><a href="{{ action('AdController@show', $ad->id) }}" class="btn btn-dark">Details</a></td>
+                                        <td>
+                                            <a href="{{ action('AdController@show', $ad->id) }}">
+                                                <img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 150px; height: auto;"/>
+                                            </a>
+                                        </td>
+                                        <td class="font-weight-bold">
+                                            <a href="{{ action('AdController@show', $ad->id) }}" class="title">{{ $ad->title }}</a><br />
+                                            {{ substr($ad->details, 0, 70) }}...
+                                        </td>
+                                        <td class="price">{{ $ad->price }}€</td>
+                                    
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            @endif
+                            <!-- <div id="grid">
+                            @foreach($ads as $ad)
+                                <div class="grid-item">
+                                    <a href="{{ action('AdController@show', $ad->id) }}">
+                                    <div>
+                                        <h3>{{ $ad->title }}</h3>
+                                        <img src="{{ asset('storage/'.$ad->photo) }}" alt="{{$ad->photo}}" style="width: 100px; height: auto;"/>
+                                        <p>{{ substr($ad->details, 0, 50) }}...</p>
+                                        <p>{{ $ad->price }}€</p>
+                                    </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                            </div>   -->
+                    @endif
                     </div>
                 </div>
             </div>
